@@ -109,7 +109,7 @@ second argument. For example:
     - : float list = [1.; 2.; 4.; 8.; 16.; 32.; 64.; 128.; 256.; 512.]
 ....................................................................*)
 
-let rec geo a b = lazy (Cons (a, smap (( * ) b) (geo a b)));;
+let rec geo a b = lazy (Cons (a, smap (( *. ) b) (geo a b)));;
 
 (*====================================================================
 Part 2. Eratosthenes' sieve revisited
