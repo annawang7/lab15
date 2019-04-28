@@ -141,7 +141,7 @@ let rec nats = lazy (Cons (0, smap ( (+) 1) nats)) ;;
 let not_div_by m n = not (n mod m = 0) ;;
 
 let rec sieve s = let Cons (h, t) = Lazy.force s in
-                  lazy (Cons h, sfilter (not_div_by h) t)                
+                  lazy (Cons (h, sfilter (not_div_by h) t))                
                   ;;
 
 let primes = sieve (tail (tail nats));;
