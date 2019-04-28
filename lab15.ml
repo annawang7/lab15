@@ -152,8 +152,7 @@ element in a stream, and use it to find out the 2000th prime.
 ....................................................................*)
 
 let rec nth (s : 'a stream) (n : int) : 'a =
-  let Cons (h, t) = Lazy.force s in
-  if n = 0 then h else nth t (n-1) ;;
+  if n = 0 then head s else nth (tail s) (n-1) ;;
 
 
 (*====================================================================
@@ -193,8 +192,9 @@ the input stream. For example:
 ....................................................................*)
   
 let rec average (s : float stream) : float stream =
-  let Cons (h1, t1) = Lazy.force s in
-  let Cons (h2, _) = Lazy.force t1 in
+  let h1 = head s in
+  let t1 = tail s in
+  let h2 = head t1 in
   lazy (Cons ((h1 +. h2) /. 2., average t1)) ;;
 
 (* Now instead of using the stream of approximations in pi_sums, you
