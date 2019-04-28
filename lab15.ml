@@ -109,7 +109,7 @@ second argument. For example:
     - : float list = [1.; 2.; 4.; 8.; 16.; 32.; 64.; 128.; 256.; 512.]
 ....................................................................*)
 
-let geo _ = failwith "geo not implemented" ;;
+let rec geo a b = lazy (Cons (a, smap (( * ) b)) geo);;
 
 (*====================================================================
 Part 2. Eratosthenes' sieve revisited
@@ -136,11 +136,15 @@ Exercise 3. Redo the Eratosthenes sieve using the NativeLazyStreams
 module by completing the values and functions below. 
 ....................................................................*)
 
-let rec nats = lazy (failwith "nats native not implemented") ;;
+let rec nats = lazy (Cons (0, smap ( (+) 1) nats)) ;;
  
-let rec sieve s = failwith "sieve native not implemented" ;;
+let not_div_by m n = not (n mod m = 0) ;;
 
-let primes = lazy (failwith "primes native not implemented") ;;
+let rec sieve s = let Cons (h, t) = Lazy.force s in
+                  lazy (Cons h, sfilter (not_div_by h) t)                
+                  ;;
+
+let primes = sieve (tail (tail nats));;
 
 (*....................................................................
 Exercise 4. How much further can you get computing primes now that the
@@ -149,7 +153,8 @@ element in a stream, and use it to find out the 2000th prime.
 ....................................................................*)
 
 let rec nth (s : 'a stream) (n : int) : 'a =
-  failwith "nth native not implemented" ;;
+  let Cons (h, t) = Lazy.force s in
+  if n = 0 then h else nth t (n-1) ;;
 
 
 (*====================================================================
@@ -188,8 +193,10 @@ the input stream. For example:
 - : float list = [0.5; 1.5; 2.5; 3.5; 4.5]
 ....................................................................*)
   
-let average (s : float stream) : float stream =
-  failwith "average not implemented" ;;
+let rec average (s : float stream) : float stream =
+  let Cons (h1, t1) = Lazy.force s in
+  let Cons (h2, t2) = Lazy.force t2 in
+  lazy (Cons ((h1 +. h2) / 2, average t1)) ;;
 
 (* Now instead of using the stream of approximations in pi_sums, you
 can instead use the stream of averaged pi_sums, which converges much
