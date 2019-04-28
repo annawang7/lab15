@@ -141,8 +141,7 @@ let rec nats = lazy (Cons (0, smap ( (+) 1) nats)) ;;
 let not_div_by m n = not (n mod m = 0) ;;
 
 let rec sieve s = let Cons (h, t) = Lazy.force s in
-                  lazy (Cons (h, sfilter (not_div_by h) t))                
-                  ;;
+                  lazy (Cons (h, sieve (sfilter (not_div_by h) t))) ;;
 
 let primes = sieve (tail (tail nats));;
 
@@ -195,7 +194,7 @@ the input stream. For example:
   
 let rec average (s : float stream) : float stream =
   let Cons (h1, t1) = Lazy.force s in
-  let Cons (h2, t2) = Lazy.force t1 in
+  let Cons (h2, _) = Lazy.force t1 in
   lazy (Cons ((h1 +. h2) /. 2., average t1)) ;;
 
 (* Now instead of using the stream of approximations in pi_sums, you
