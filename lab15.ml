@@ -191,10 +191,7 @@ the input stream. For example:
 ....................................................................*)
   
 let rec average (s : float stream) : float stream =
-  let h1 = head s in
-  let t1 = tail s in
-  let h2 = head t1 in
-  lazy (Cons ((h1 +. h2) /. 2., average t1)) ;;
+   smap2 (fun x y -> (x +. y) /. 2.0) s (tail s) ;;
 
 (* Now instead of using the stream of approximations in pi_sums, you
 can instead use the stream of averaged pi_sums, which converges much
