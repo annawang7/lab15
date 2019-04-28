@@ -223,7 +223,16 @@ generate approximations of pi.
 ....................................................................*)
    
 let aitken (s: float stream) : float stream =
-  failwith "aitken not implemented" ;;
+  smap2 (-.)
+        s
+        (smap2 (/.)
+               (smap (fun x -> x *. x)
+                     (smap2 (-.) s (tail s)))
+               (smap2 (+.)
+                      (smap2 (-.)
+                             s
+                             (smap (( *. ) 2.) (tail s)))
+                      (tail  (tail s)))) ;;
 
 (*......................................................................
 Exercise 7: Testing the acceleration
