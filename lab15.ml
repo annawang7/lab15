@@ -196,7 +196,7 @@ the input stream. For example:
 let rec average (s : float stream) : float stream =
   let Cons (h1, t1) = Lazy.force s in
   let Cons (h2, t2) = Lazy.force t1 in
-  lazy (Cons ((h1 +. h2) / 2, average t1)) ;;
+  lazy (Cons ((h1 +. h2) /. 2, average t1)) ;;
 
 (* Now instead of using the stream of approximations in pi_sums, you
 can instead use the stream of averaged pi_sums, which converges much
